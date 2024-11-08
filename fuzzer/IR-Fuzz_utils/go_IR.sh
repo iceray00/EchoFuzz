@@ -1,0 +1,38 @@
+#!/bin/bash
+CURRENT_INDEX=0
+START_INDEX=${1:-0}
+DURATION=${2:-5}
+STOP_INDEX=${3:-99999}
+
+echo "current index is: $START_INDEX"
+
+sh rm.sh
+
+for sol in vfcs_dataset_0_4/*.sol; do
+  echo "================================================="
+  echo "------ Current solidity file: $sol ------"
+
+  if [ "$CURRENT_INDEX" -lt "$START_INDEX" ]; then
+    CURRENT_INDEX=$((CURRENT_INDEX + 1))
+    continue
+  fi
+
+  if [ "$CURRENT_INDEX" -ge "$STOP_INDEX" ]; then
+    echo "Reached the stop index: $STOP_INDEX. Exiting loop."
+    break
+  fi
+
+  echo "=====********* Processing file $((CURRENT_INDEX + 1)) *********====="
+  cp "$sol" source_code/
+  sh rename_src.sh
+  sh run_IR-Fuzz.sh "$DURATION"
+  contractName="$(basename "$sol" .sol)"
+  rm totalBranchSnippet_*.txt sequence_*.txt coverage_*.txt covered_*.txt tracebits_*.txt
+  python3 vLFuzz_utils/tempToJson_IR-Fuzz.py --sol_name $contractName --model_name IRFUZZZZ -d $DURATION -g 1
+  rm temp_*.txt
+  python3 vLFuzz_utils/generate_summary_csv.py --sol_name $contractName --model_name IRFUZZZZ --duration $DURATION --gap_time 1
+  sh rm.sh
+
+  # Increment CURRENT_INDEX after processing
+  CURRENT_INDEX=$((CURRENT_INDEX + 1))
+done
