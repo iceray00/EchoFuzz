@@ -136,11 +136,11 @@ for sol in FNT_dataset/*.sol; do
       echo "Execution successful!"
     fi
   done
-#  python3 vLFuzz_utils/changeTemp.py -i temp_${contractName}_phase1_result.txt --gap_time 1
+#  python3 EchoFuzz_utils/changeTemp.py -i temp_${contractName}_phase1_result.txt --gap_time 1
   rm sequence_${contractName}.txt totalBranchSnippet_${contractName}.txt covered_${contractName}.txt coverage_${contractName}.txt tracebits_${contractName}.txt
-#  python3 vLFuzz_utils/tempToJson_IR-Fuzz_pro.py --sol_name $contractName --model_name $MODEL_NAME -d $((DURATION * ROUND)) -g 1
+#  python3 EchoFuzz_utils/tempToJson_IR-Fuzz_pro.py --sol_name $contractName --model_name $MODEL_NAME -d $((DURATION * ROUND)) -g 1
   rm temp_${contractName}_phase1_resul*.txt
-#  python3 vLFuzz_utils/generate_summary_csv2.py --sol_name $contractName --model_name $MODEL_NAME --duration $((DURATION * ROUND)) --gap_time 1
+#  python3 EchoFuzz_utils/generate_summary_csv2.py --sol_name $contractName --model_name $MODEL_NAME --duration $((DURATION * ROUND)) --gap_time 1
   sh rm.sh
 
   # Increment CURRENT_INDEX after processing

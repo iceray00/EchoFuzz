@@ -28,9 +28,9 @@ for sol in FNT_dataset/*.sol; do
   ./falseNegativeTest.sh "$DURATION"
 #  contractName="$(basename "$sol" .sol)"
   rm totalBranchSnippet_*.txt sequence_*.txt coverage_*.txt covered_*.txt tracebits_*.txt
-#  python3 vLFuzz_utils/tempToJson_IR-Fuzz.py --sol_name $contractName --model_name IRFUZZZZ -d $DURATION -g 1
+#  python3 EchoFuzz_utils/tempToJson_IR-Fuzz.py --sol_name $contractName --model_name IRFUZZZZ -d $DURATION -g 1
   rm temp_*.txt
-#  python3 vLFuzz_utils/generate_summary_csv.py --sol_name $contractName --model_name IRFUZZZZ --duration $DURATION --gap_time 1
+#  python3 EchoFuzz_utils/generate_summary_csv.py --sol_name $contractName --model_name IRFUZZZZ --duration $DURATION --gap_time 1
   sh rm.sh
   sleep 5
   echo "=== Sleep wait 5s! ==="

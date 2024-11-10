@@ -5,28 +5,23 @@ import sys
 
 
 def process_json_file(current_time, contract_name):
-    # 定义文件路径
     file_path = f"contracts/{contract_name}/{contract_name}_report.json"
 
-    # 检查文件是否存在
     if not os.path.exists(file_path):
         print(f"文件 {file_path} 不存在.")
         return
 
-    # 读取 JSON 文件内容
     try:
         with open(file_path, 'r') as file:
             data = json.load(file)
     except json.JSONDecodeError:
-        print(f"无法解析 {file_path} 中的 JSON 文件.")
+        print(f"Unable to parse JSON file in {file_path}.")
         return
 
-    # 提取所需的值
     coverage = data.get("coverage", 0)
     uniq_exceptions = data.get("uniqExceptions", 0)
 
     csv_file = "IR-FUZZZZ.csv"
-    # 读取或创建 CSV 文件
     rows = []
     if os.path.exists(csv_file):
         try:
