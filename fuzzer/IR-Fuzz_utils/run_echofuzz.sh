@@ -55,7 +55,11 @@ for ((i_pro=1; i_pro<=ROUND ; i_pro++)); do  # Start EchoFuzz
     ./analyse_prefix > logs/analyze.txt
     python3 tools/gen_attack_contract.py contracts/${contractName}/${contractName}.sol
     ./fuzz --file contracts/${contractName}/${contractName}.sol.json --source contracts/${contractName}/${contractName}.sol --name $contractName --assets assets --duration "$DURATION" --mode 0 --reporter 2 --attacker ReentrancyAttacker --is_first 0 --testcases 5
-    echo " === round: $i_pro successfully! === "
+    if [ $? -eq 0 ]; then
+      echo " === round: $i_pro successfully! === "
+    else
+      echo " === round: $i_pro failed! === "
+    fi
 
   # /* ====== for the other time, employing LLM-Guided Iterative Fuzzing Process to Generate candidate VFCS ====== */
   else
@@ -89,7 +93,11 @@ for ((i_pro=1; i_pro<=ROUND ; i_pro++)); do  # Start EchoFuzz
     ./analyse_prefix > logs/analyze.txt
     python3 tools/gen_attack_contract.py contracts/${contractName}/${contractName}.sol
     ./fuzz --file contracts/${contractName}/${contractName}.sol.json --source contracts/${contractName}/${contractName}.sol --name $contractName --assets assets --duration "$DURATION" --mode 0 --reporter 2 --attacker ReentrancyAttacker --is_first 0 --testcases 5
-    echo " === round: $i_pro successfully! === "
+    if [ $? -eq 0 ]; then
+      echo " === round: $i_pro successfully! === "
+    else
+      echo " === round: $i_pro failed! === "
+    fi
   fi
   if [ $i_pro -eq "$ROUND" ]; then  # By the last round of execution, there is no need to invoke LLM to generate new VFCS
     continue
