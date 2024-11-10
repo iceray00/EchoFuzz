@@ -48,7 +48,7 @@ or you can exec:
 export GOPROXY=https://goproxy.io
 ```
 
-### Check working:
+### Check it working:
 
 ```bash
 cmake --version
@@ -79,7 +79,7 @@ sh initial_EchoFuzz.sh
 You can run EchoFuzz by executable file `run_echofuzz.sh`
 
 ```bash
-./run_echofuzz.sh $Duration $Round $ModelName
+./run_echofuzz.sh $DURATION $ROUND $MODEL_NAME
 ```
 
 
