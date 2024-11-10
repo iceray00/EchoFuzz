@@ -74,7 +74,7 @@ sh initial_EchoFuzz.sh
 ```
 
 
-## Run
+## Start Running
 
 You can run EchoFuzz by executable file `run_echofuzz.sh`
 

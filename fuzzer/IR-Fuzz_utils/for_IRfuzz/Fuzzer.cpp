@@ -655,7 +655,7 @@ void Fuzzer::stop()
     exit(1);
 }
 
-/* vLFuzz */
+/* EchoFuzz */
 void Fuzzer::stop(int exitState)
 {
     if (fuzzParam.is_prefuzz)
@@ -726,7 +726,7 @@ void Fuzzer::start()
     unordered_set<u64> showSet;
     int lib_num = 0;
 
-    /* vLFuzz */
+    /* EchoFuzz */
     int isFirst = fuzzParam.isFirst;
 
     for (auto contractInfo : fuzzParam.contractInfo)
@@ -822,7 +822,7 @@ void Fuzzer::start()
             auto validJumpis = bytecodeBranch.findValidJumpis();
             snippets = bytecodeBranch.snippets;
 
-            /*============================ vLFuzz ============================*/
+            /*============================ EchoFuzz ============================*/
             /* show all valid branch */
             /* Print code snippets for all branches at the beginning of fuzzing */
             auto totalBranches = (get<0>(validJumpis).size() + get<1>(validJumpis).size()) * 2;
@@ -890,7 +890,7 @@ void Fuzzer::start()
                 unordered_set<string> prevTracebits = loadTracebits(tracebitsFileName);
                 tracebits.insert(prevTracebits.begin(), prevTracebits.end());
             }
-            /*============================ vLFuzz ============================*/
+            /*============================ EchoFuzz ============================*/
 
             // int branchSize = (int)(get<0>(validJumpis).size() + get<1>(validJumpis).size() +
             //                        get<2>(validJumpis).size() + get<3>(validJumpis).size()) *
@@ -904,7 +904,7 @@ void Fuzzer::start()
             data0Len = saveIfInterest(executive, ca.randomTestcase(), 0, validJumpis)
                     .data.size();  // execute first
 
-            /*============================ vLFuzz ============================*/
+            /*============================ EchoFuzz ============================*/
             // 在 fuzzing 过程中提取 tracebits 并转化为代码片段
             auto extractTracebits = [&]() {
                 vector<string> tracebitSnippets;
@@ -928,7 +928,7 @@ void Fuzzer::start()
             //     cout << "*** The " << ++tmp_cb << "th Covered Branch is:" << endl;
             //     cout << snippet << "\n===============\n" << endl;
             // }
-            /*============================ vLFuzz ============================*/
+            /*============================ EchoFuzz ============================*/
 
             int originHitCount = leaders.size();
             /*
@@ -953,7 +953,7 @@ void Fuzzer::start()
                 stop(0);
             }
 
-            /*============================ vLFuzz ============================*/
+            /*============================ EchoFuzz ============================*/
             int id = 0;
             double lastRecordTime = 0;
             double lastTracebitsTime = 0;
@@ -978,13 +978,13 @@ void Fuzzer::start()
                     outFile << 1 << endl;
                     outFile << vulnerabilityCalculate() << endl;
                     outFile.close();
-                    cout << "Result save in [" << fileName << "] successfully!" << endl;
+            //        cout << "Result save in [" << fileName << "] successfully!" << endl;
                 } else {
                     std::cerr << "UNABLE to open file in saving file " << fileName << endl;
                 }
                 stop(0);
             }
-            /*============================ vLFuzz ============================*/
+            /*============================ EchoFuzz ============================*/
 
             // Jump to fuzz loop
             while (true)
@@ -1049,7 +1049,7 @@ void Fuzzer::start()
                             outFile << 1 << endl;
                             outFile << vulnerabilityCalculate() << endl;
                             outFile.close();
-                            cout << "Result save in [" << fileName << "] successfully!" << endl;
+                    //        cout << "Result save in [" << fileName << "] successfully!" << endl;
                         } else {
                             std::cerr << "UNABLE to open file in saving file " << fileName << endl;
                         }
@@ -1098,13 +1098,13 @@ void Fuzzer::start()
                                 outFile << 1 << endl;
                                 outFile << vulnerabilityCalculate() << endl;
                                 outFile.close();
-                                cout << "Result save in [" << fileName << "] successfully!" << endl;
+                        //        cout << "Result save in [" << fileName << "] successfully!" << endl;
                             } else {
                                 std::cerr << "UNABLE to open file in saving file " << fileName << endl;
                             }
                             stop(0);
                         }
-                        /*============================ vLFuzz ============================*/
+                        /*============================ EchoFuzz ============================*/
                         cout << "\n********************\nNow, Coverage: " << coverageCalculate(validJumpis) << "\n^^^^^^^^^" << endl;
                         cout << "Number of Vulnerability: " << vulnerabilityCalculate() << endl;
 
@@ -1126,7 +1126,7 @@ void Fuzzer::start()
                             outFile << coverageCalculate(validJumpis) << endl;
                             outFile << vulnerabilityCalculate() << endl;
                             outFile.close();
-                            cout << "Result save in [" << fileName << "] successfully!" << endl;
+            //                cout << "Result save in [" << fileName << "] successfully!" << endl;
                         } else {
                             std::cerr << "UNABLE to open file in saving file " << fileName << endl;
                         }
@@ -1162,7 +1162,7 @@ void Fuzzer::start()
                         } else {
                             std::cerr << "UNABLE to open file in saving file " << coverageFileName << endl;
                         }
-                        /*============================ vLFuzz ============================*/
+                        /*============================ EchoFuzz ============================*/
 
                         stop(0);
                     }
@@ -1188,14 +1188,45 @@ void Fuzzer::start()
                         outFile << 1 << endl;
                         outFile << vulnerabilityCalculate() << endl;
                         outFile.close();
-                        cout << "Result save in [" << fileName << "] successfully!" << endl;
+                //         cout << "Result save in [" << fileName << "] successfully!" << endl;
                     } else {
                         std::cerr << "UNABLE to open file in saving file " << fileName << endl;
+                    }
+
+                    /* save tracebits file before STOP fuzzing */
+                    string saveTbFileName = "tracebits_" + contractName + ".txt";
+                    saveTracebits(tracebits, saveTbFileName);
+
+                   /* save the tracebits in source code snippet */
+                    string saveCoveredFileName = "covered_" + contractName + ".txt";
+                    vector<string> tracebitSnippets = extractTracebits();
+                    ofstream tbsFile(saveCoveredFileName);
+                    if (tbsFile.is_open()) {
+                        tbsFile << "Covered Branches: (total " << tracebitSnippets.size() << ")" << endl;
+                        int tmp_cb = 0;
+                        for (const auto &snippet : tracebitSnippets) {
+                            tbsFile << "*** The " << ++tmp_cb << "th Covered Branch is:" << endl;
+                            tbsFile << snippet << "\n===============\n" << endl;
+                        }
+                        tbsFile.close();
+                        // cout << "save file [" << saveCoveredFileName << "] successfully!" << endl;
+                    } else {
+                        std::cerr << "UNABLE to open file in saving file " << saveCoveredFileName << endl;
+                    }
+
+                    string coverageFileName = "coverage_" + contractName + ".txt";
+                    ofstream coverage(coverageFileName);
+                    if (coverage.is_open()) {
+                        coverage << coverageCalculate(validJumpis);
+                        coverage.close();
+                        // cout << "save file [" << coverageFileName << "] successfully!" << endl;
+                    } else {
+                        std::cerr << "UNABLE to open file in saving file " << coverageFileName << endl;
                     }
                     stop(0);
                 }
 
-                /*============================ vLFuzz ============================*/
+                /*============================ EchoFuzz ============================*/
                 /* save in TEMP file! */
                 auto contract = mainContract();
                 string fullContractName = contract.contractName;
@@ -1240,8 +1271,8 @@ void Fuzzer::start()
                         outFile << coverageCalculate(validJumpis) << endl;
                         outFile << vulnerabilityCalculate() << endl;
                         outFile.close();
-                        cout << "                                                                    ";
-                        cout << "Result appended to [" << fileName << "] successfully!" << endl;
+//                        cout << "                                                                    ";
+//                        cout << "Result appended to [" << fileName << "] successfully!" << endl;
 
                         lastRecordTime = (double)static_cast<int>(timer.elapsed());
                     } else {
@@ -1279,7 +1310,7 @@ void Fuzzer::start()
                         std::cerr << "UNABLE to open file in saving file " << coverageFileName << endl;
                     }
                 }
-                /*============================ vLFuzz ============================*/
+                /*============================ EchoFuzz ============================*/
 
                 // If it is uncovered branch
                 if (comparisonValue != 0)
@@ -1419,7 +1450,7 @@ void Fuzzer::start()
             vector<unordered_set<string>> vulnerCase(TOTAL, unordered_set<string>{});
 
 
-            // /*============================ vLFuzz ============================*/
+            // /*============================ EchoFuzz ============================*/
             // // 在 fuzzing 过程中提取 tracebits 并转化为代码片段
             // auto extractTracebits = [&]() {
             //     vector<string> tracebitSnippets;
@@ -1434,7 +1465,7 @@ void Fuzzer::start()
             //     }
             //     return tracebitSnippets;
             // };
-            // /*============================ vLFuzz ============================*/
+            // /*============================ EchoFuzz ============================*/
             int id = 0;
             double lastRecordTime = 0;
             double lastTracebitsTime = 0;
@@ -1560,7 +1591,7 @@ void Fuzzer::start()
                                 break;
                             }
                         }
-            //             /*============================ vLFuzz ============================*/
+            //             /*============================ EchoFuzz ============================*/
             //             cout << "\n********************\nNow, Coverage: " << coverageCalculate(validJumpis) << "\n^^^^^^^^^" << endl;
             //             cout << "Number of Vulnerability: " << vulnerabilityCalculate() << endl;
 
@@ -1618,7 +1649,7 @@ void Fuzzer::start()
             //             } else {
             //                 std::cerr << "UNABLE to open file in saving file " << coverageFileName << endl;
             //             }
-            //             /*============================ vLFuzz ============================*/
+            //             /*============================ EchoFuzz ============================*/
 
                         stop(0);
                     }
@@ -1626,7 +1657,7 @@ void Fuzzer::start()
                 };
 
 
-    //             /*============================ vLFuzz ============================*/
+    //             /*============================ EchoFuzz ============================*/
     //             /* save in TEMP file! */
     //             auto contract = mainContract();
     //             string fullContractName = contract.contractName;
@@ -1679,7 +1710,7 @@ void Fuzzer::start()
     //                     std::cerr << "UNABLE to open file in appending to " << fileName << endl;
     //                 }
     //             }
-    //             /*============================ vLFuzz ============================*/
+    //             /*============================ EchoFuzz ============================*/
 
 
                 /*testing according to weight*/
@@ -1753,7 +1784,7 @@ void Fuzzer::start()
     }
 }
 
-/* vLFuzz */
+/* EchoFuzz */
 void Fuzzer::saveTracebits(const unordered_set<string>& tracebits, const string& filename) {
     ofstream outfile(filename);
     if (!outfile) {

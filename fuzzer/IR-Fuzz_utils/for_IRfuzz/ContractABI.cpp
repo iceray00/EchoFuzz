@@ -389,7 +389,7 @@ bytes ContractABI::randomTestcase()
 //     // cout << "after : " << this->fds.size() << endl;
 // }
 
-/* vLFuzz */
+/* EchoFuzz */
 ContractABI::ContractABI(string abiJson)
 {
     transactionLength = 1;

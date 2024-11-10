@@ -22,6 +22,8 @@ cp fuzzer ../../../fuzz
 cd ../../../bran/
 go build -v -o ../analyse_prefix
 cd ..
+cd source_code
+mv example1.sol GuessNum.sol
 # in echoFuzz_field
 
 cd ../IR-Fuzz_utils
