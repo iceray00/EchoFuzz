@@ -108,5 +108,6 @@ for ((i_pro=1; i_pro<=ROUND ; i_pro++)); do  # Start EchoFuzz
   if [ $? -eq 0 ]; then
     echo "Execution successful!"
   fi
-  sh clearTemp.sh
 done
+
+sh clearTemp.sh

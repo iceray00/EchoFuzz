@@ -1795,7 +1795,7 @@ void Fuzzer::saveTracebits(const unordered_set<string>& tracebits, const string&
         outfile << trace << "\n";
     }
     outfile.close();
-    cout << "Successfully save [" << filename << "]! ----Fuzzer Pro" << endl;
+//    cout << "Successfully save [" << filename << "]! ----Fuzzer Pro" << endl;
 }
 
 unordered_set<string> Fuzzer::loadTracebits(const string& filename) {
@@ -1810,6 +1810,6 @@ unordered_set<string> Fuzzer::loadTracebits(const string& filename) {
         tracebits.insert(trace);
     }
     infile.close();
-    cout << "Successfully load [" << filename << "]! ----Fuzzer Pro" << endl;
+//    cout << "Successfully load [" << filename << "]! ----Fuzzer Pro" << endl;
     return tracebits;
 }
