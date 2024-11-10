@@ -2,7 +2,8 @@
 
 
 ## In AutoDL
-* A widely used computing platform
+* A widely used computing platform.
+* https://www.autodl.com/
 
 ```bash
 sh ./initial_llm_autodl.sh
