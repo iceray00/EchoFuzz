@@ -1,6 +1,6 @@
 #!/bin/bash
 
-DURATION=${1:-5}
+DURATION=${1:-60}
 ROUND=${2:-3}
 MODEL_NAME=${3:-"gpt-4o-mini"}
 
