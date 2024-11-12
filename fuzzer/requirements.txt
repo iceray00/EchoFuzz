@@ -1,0 +1,6 @@
+slither-analyzer==0.10.3
+solc-select
+requests
+openai
+scipy
+pandas

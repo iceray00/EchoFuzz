@@ -32,9 +32,10 @@ sudo add-apt-repository -y ppa:ethereum/ethereum
 ```bash
 sudo apt update
 sudo apt install -y build-essential git libssl-dev libgmp-dev libboost-all-dev ethereum libjsoncpp-dev
+pip3 install -r ruquirements.txt
 ```
 
-Next, we install the _Solidity_ compiler `solc`. If it is already installed, you can ignore it.  We use the integrated tool [solc-select](https://github.com/crytic/solc-select) to achieve this.
+Next, we install the _Solidity_ compiler `solc`. If it is already installed, you can ignore it. We use the integrated tool [solc-select](https://github.com/crytic/solc-select) to achieve this.
 
 ```bash
 pip3 install numpy solc-select
