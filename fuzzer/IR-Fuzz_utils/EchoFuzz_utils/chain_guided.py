@@ -6,6 +6,7 @@ import subprocess
 from format_conversion import process_content, save_abi_to_file
 from prompt_phases import prompt_to_vfcs_phase1, prompt_vfcs_phase2, prompt_generate_VFCS, prompt_vfcs_abi
 
+
 def extract_contract_name(file_path):
     """
     从文件路径中提取合同名称
@@ -13,6 +14,13 @@ def extract_contract_name(file_path):
     file_name = os.path.basename(file_path)
     contract_name, _ = os.path.splitext(file_name)
     return contract_name
+
+
+def save_to_file(result, file_path):
+    with open(file_path, 'w', encoding='utf-8') as f:
+        json.dump(result, f, ensure_ascii=False)
+    print(f"Successfully output saved to {file_path}")
+
 
 def chain_guided():
     #
@@ -44,12 +52,19 @@ def chain_guided():
             print(f"Extracted contract name: {contract_name}")
 
             result_1 = prompt_to_vfcs_phase1(source_code, model_name=args.model_name, ctx=args.ctx, mode=args.mode)
+            save_to_file(result_1, "swap_backend/phase_1.txt")
 
-            result_2 = prompt_vfcs_phase2(result_1, args.input, source_code, model_name=args.model_name, ctx=args.ctx, mode=args.mode)
+            result_2 = prompt_vfcs_phase2(result_1, args.input, source_code, model_name=args.model_name, ctx=args.ctx,
+                                          mode=args.mode)
+            save_to_file(result_2, "swap_backend/phase_2.txt")
 
-            result_vfcs = prompt_generate_VFCS(result_1, result_2, args.input, source_code, model_name=args.model_name, ctx=args.ctx, mode=args.mode)
+            result_vfcs = prompt_generate_VFCS(result_1, result_2, args.input, source_code, model_name=args.model_name,
+                                               ctx=args.ctx, mode=args.mode)
+            save_to_file(result_vfcs, "swap_backend/phase_3.txt")
 
-            result_vfcs_abi = prompt_vfcs_abi(result_vfcs, args.input, model_name=args.model_name, ctx=args.ctx, mode=args.mode)
+            result_vfcs_abi = prompt_vfcs_abi(result_vfcs, args.input, model_name=args.model_name, ctx=args.ctx,
+                                              mode=args.mode)
+            save_to_file(result_vfcs_abi, "swap_backend/phase_4.txt")
             print(f"\n \nGenerated VFCS ABI:\n \n {result_vfcs_abi}")
 
             # 调用函数对生成的result_vfcs_abi进行格式处理，转换为正确的JSON格式
@@ -84,7 +99,8 @@ def chain_guided():
 
                 current_dir = os.path.dirname(os.path.abspath(__file__))
                 change_abi_utils_path = os.path.join(current_dir, "utils", "change_abi.py")
-                subprocess.run(["python3", change_abi_utils_path, output_file_path, output_file_path, model_folder_path])
+                subprocess.run(
+                    ["python3", change_abi_utils_path, output_file_path, output_file_path, model_folder_path])
                 print("\n \nChange ABI successfully!\n \n")
 
             print("\n \n All steps have been executed!\n \n")
@@ -93,6 +109,7 @@ def chain_guided():
             print(f"File not found: {args.input}")
         except Exception as e:
             print(f"Error reading file: {e}")
+
 
 if __name__ == "__main__":
     chain_guided()

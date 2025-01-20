@@ -5,8 +5,18 @@ import sys
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__))))
 
+language_prompt_from_env = os.environ.get('LANGUAGE_PROMPT').lower()
 
+# default is English
 BASE_PROMPT_PATH = "prompt.prompt_English"
+
+# 如果显式在环境中设定了prompt所采用的语言模式，则采用其设定的语言模式
+if language_prompt_from_env:
+    if language_prompt_from_env == "cn" or language_prompt_from_env == "chinese":
+        print("Chinese prompt selected!")
+        BASE_PROMPT_PATH = BASE_PROMPT_PATH.replace("English", "Chinese")
+    else:
+        print("English prompt selected!")
 
 # 动态导入模块
 try:

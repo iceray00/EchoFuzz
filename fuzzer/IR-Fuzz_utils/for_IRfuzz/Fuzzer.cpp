@@ -15,6 +15,22 @@ using namespace fuzzer;
 using namespace jsonxx;
 namespace pt = boost::property_tree;
 
+template <typename T>
+void writeToFile(const std::string& filePath, const T& content) {
+    // 打开文件用于写入
+    std::ofstream outputFile(filePath);
+
+    if (outputFile.is_open()) {
+        outputFile << content << std::endl;
+
+        outputFile.close();
+
+        std::cout << "数据已成功写入到文件：" << filePath << std::endl;
+    } else {
+        std::cerr << "无法打开文件：" << filePath << "进行写入。" << std::endl;
+    }
+}
+
 /* Setup virgin byte to 255 */
 Fuzzer::Fuzzer(FuzzParam fuzzParam) : fuzzParam(fuzzParam)
 {
@@ -257,8 +273,14 @@ void Fuzzer::showStats(const Mutation& mutation, const int branchSize)
         printf(cGRN Bold "%sIR-Fuzz vulernability detecting (%s)" cRST "\n", padStr("", 10).c_str(),
                contract.contractName.substr(10, contract.contractName.find(":") - 14).c_str());
     printf(bTL bV5 cGRN " processing time " cRST bV20 bV20 bV5 bV2 bV2 bV5 bV bTR "\n");
+
     printf(bH "      run time : %s " bH "\n", formatDuration(duration).data());
+    writeToFile("swap_backend/fuzz_state/run_time.txt", formatDuration(duration).data());
+
+
     printf(bH " last new path : %s " bH "\n", formatDuration(fromLastNewPath).data());
+    writeToFile("swap_backend/fuzz_state/last_new_path.txt", formatDuration(fromLastNewPath).data());
+
 
     printf(bLTR bV5 cGRN " fuzzing yields " cRST bV5 bV5 bV5 bV2 bV2 bV10 bV bTTR bV cGRN
            " path geometry " cRST bV2 bV2 bRTR "\n");
@@ -267,6 +289,8 @@ void Fuzzer::showStats(const Mutation& mutation, const int branchSize)
            pendingFav.c_str());
     printf(bH " arithmetics : %s" bH "   max depth : %s" bH "\n", arithmetic.c_str(),
            maxdepthStr.c_str());
+    writeToFile("swap_backend/fuzz_state/max_depth.txt", maxdepthStr.c_str());
+
     printf(bH "  known ints : %s" bH " uniq except : %s" bH "\n", knownInts.c_str(),
            exceptionCount.c_str());
     printf(bH "  dictionary : %s" bH "  predicates : %s" bH "\n", dictionary.c_str(),
@@ -280,12 +304,21 @@ void Fuzzer::showStats(const Mutation& mutation, const int branchSize)
                " overall results " cRST bV2 bRTR "\n");
         printf(bH "  now trying : %s" bH " cycles done : %s" bH "\n", nowTrying.c_str(),
                cycleDone.c_str());
+        writeToFile("swap_backend/fuzz_state/cycles_done.txt", cycleDone.c_str());
+
         printf(bH " stage execs : %s" bH "    branches : %s" bH "\n", stageExec.c_str(),
                numBranches.c_str());
+        writeToFile("swap_backend/fuzz_state/branches.txt", numBranches.c_str());
+
         printf(bH " total execs : %s" bH "    coverage : %s" bH "\n", allExecs.c_str(),
                coverage.c_str());
+        writeToFile("swap_backend/fuzz_state/total_execs.txt", allExecs.c_str());
+        writeToFile("swap_backend/fuzz_state/coverage.txt", coverage.c_str());
+
         printf(bH "  exec speed : %s" bH "               %s" bH "\n", execSpeed.c_str(),
                padStr("", 15).c_str());
+        writeToFile("swap_backend/fuzz_state/exec_speed.txt", execSpeed.c_str());
+
         printf(bH "  cycle prog : %s" bH "               %s" bH "\n", cycleProgress.c_str(),
                padStr("", 15).c_str());
         printf(bBL bV20 bV2 bV20 bV bBTR bV2 bV10 bV20 bV2 bV2 bBR "\n");

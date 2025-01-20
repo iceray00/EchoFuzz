@@ -23,16 +23,14 @@ git clone https://github.com/Messi-Q/IR-Fuzz.git
 then, please install the dependencies:
 ```bash
 sudo apt update
-
 sudo apt install -y cmake golang-go libleveldb-dev libcrypto++-dev software-properties-common
-
 sudo add-apt-repository -y ppa:ethereum/ethereum
 ```
 
 ```bash
 sudo apt update
 sudo apt install -y build-essential git libssl-dev libgmp-dev libboost-all-dev ethereum libjsoncpp-dev
-pip3 install -r ruquirements.txt
+pip3 install -r requirements.txt
 ```
 
 Next, we install the _Solidity_ compiler `solc`. If it is already installed, you can ignore it. We use the integrated tool [solc-select](https://github.com/crytic/solc-select) to achieve this.
