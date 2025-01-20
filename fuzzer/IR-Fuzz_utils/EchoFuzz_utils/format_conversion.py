@@ -3,7 +3,6 @@ import json
 import os
 
 def process_content(content):
-    # 移除开始和结尾的多余标记
     content = content.strip()
     content = re.sub(r'```.*?\n', '', content)
     content = re.sub(r'\n```', '', content)
@@ -20,7 +19,6 @@ def process_content(content):
     for contract in contracts:
         try:
             contract_name, abi_json = contract
-            # 处理多余的引号
             abi_json = abi_json.replace('\\"', '"')
             abi_list = json.loads(abi_json)
 

@@ -8,7 +8,7 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__))))
 
 BASE_PROMPT_PATH = "prompt.prompt_English"
 
-# 动态导入模块
+# Import modules dynamically
 try:
     prompt_vfcs_abi = importlib.import_module(f"{BASE_PROMPT_PATH}.prompt_vfcs_abi")
     prompt_phase1_intro = importlib.import_module(f"{BASE_PROMPT_PATH}.prompt_phase1_intro")
@@ -17,14 +17,13 @@ try:
 except ImportError as e:
     raise ImportError(f"Error importing modules: {e}")
 
-# 获取属性的函数
+# get the property
 def get_attr(module, attr):
     if hasattr(module, attr):
         return getattr(module, attr)
     else:
         raise AttributeError(f"Module {module} has no attribute {attr}")
 
-# 从导入的模块中获取所需的属性
 VFCS_abi_1 = get_attr(prompt_vfcs_abi, 'VFCS_abi_1')
 input_abi = get_attr(prompt_vfcs_abi, 'input_abi')
 input_VFCS = get_attr(prompt_vfcs_abi, 'input_VFCS')

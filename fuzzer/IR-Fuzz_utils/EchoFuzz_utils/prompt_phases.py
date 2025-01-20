@@ -10,7 +10,7 @@ language_prompt_from_env = os.environ.get('LANGUAGE_PROMPT').lower()
 # default is English
 BASE_PROMPT_PATH = "prompt.prompt_English"
 
-# 如果显式在环境中设定了prompt所采用的语言模式，则采用其设定的语言模式
+# If the language mode is explicitly specified in the environment, adopt the language mode specified by prompt
 if language_prompt_from_env:
     if language_prompt_from_env == "cn" or language_prompt_from_env == "chinese":
         print("Chinese prompt selected!")
@@ -18,7 +18,7 @@ if language_prompt_from_env:
     else:
         print("English prompt selected!")
 
-# 动态导入模块
+# Import modules dynamically
 try:
     prompt_vfcs_abi = importlib.import_module(f"{BASE_PROMPT_PATH}.prompt_vfcs_abi")
     prompt_phase1_intro = importlib.import_module(f"{BASE_PROMPT_PATH}.prompt_phase1_intro")
@@ -27,14 +27,13 @@ try:
 except ImportError as e:
     raise ImportError(f"Error importing modules: {e}")
 
-# 获取属性的函数
+# function to get the property
 def get_attr(module, attr):
     if hasattr(module, attr):
         return getattr(module, attr)
     else:
         raise AttributeError(f"Module {module} has no attribute {attr}")
 
-# 从导入的模块中获取所需的属性
 VFCS_abi_1 = get_attr(prompt_vfcs_abi, 'VFCS_abi_1')
 input_abi = get_attr(prompt_vfcs_abi, 'input_abi')
 input_VFCS = get_attr(prompt_vfcs_abi, 'input_VFCS')

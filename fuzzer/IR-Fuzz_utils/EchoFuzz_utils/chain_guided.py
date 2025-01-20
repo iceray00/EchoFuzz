@@ -67,7 +67,7 @@ def chain_guided():
             save_to_file(result_vfcs_abi, "swap_backend/phase_4.txt")
             print(f"\n \nGenerated VFCS ABI:\n \n {result_vfcs_abi}")
 
-            # 调用函数对生成的result_vfcs_abi进行格式处理，转换为正确的JSON格式
+            # Call the function to format the generated result_vfcs_abi into the correct JSON format
             result_vfcs_abi_dict = process_content(result_vfcs_abi)
             if result_vfcs_abi_dict:
                 print(f"\n\nConversion successful!:\n\n {result_vfcs_abi_dict}")

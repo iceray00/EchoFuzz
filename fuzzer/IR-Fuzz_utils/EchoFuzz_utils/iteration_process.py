@@ -20,9 +20,6 @@ from format_conversion import process_content, save_abi_to_file
 from chain_guided import save_to_file
 
 def extract_contract_name(file_path):
-    """
-    从文件路径中提取合同名称
-    """
     file_name = os.path.basename(file_path)
     contract_name, _ = os.path.splitext(file_name)
     return contract_name
