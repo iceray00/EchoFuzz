@@ -55,6 +55,7 @@ def promptFuzzerPro(contractName, source_code, duration, model_name):
     # print(total_prompt)
     return fuzzerPro
 
+
 def fuzzer_pro():
     """
     params:

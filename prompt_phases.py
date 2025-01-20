@@ -3,7 +3,7 @@ import importlib
 
 BASE_PROMPT_PATH = "prompts.prompt_English"
 
-# 动态导入模块
+# Importing modules dynamically
 try:
     prompt_vfcs_abi = importlib.import_module(f"{BASE_PROMPT_PATH}.prompt_vfcs_abi")
     prompt_phase1_intro = importlib.import_module(f"{BASE_PROMPT_PATH}.prompt_phase1_intro")
