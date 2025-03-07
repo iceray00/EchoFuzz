@@ -4,7 +4,7 @@ import requests
 model_url = "http://localhost:11434/api/generate"
 
 
-def generate_prompt_response(prompt, model_name="Qwen1.5-32B-Q4", max_tokens_length=400, max_context_length=2048, mode="print"):
+def generate_prompt_response(prompt, model_name="Qwen1.5-32B-Q4", max_tokens_length=4096, max_context_length=2048, mode="print"):
     """
     Generate a response from the LLM
     :param prompt: Prompt to send
@@ -20,7 +20,7 @@ def generate_prompt_response(prompt, model_name="Qwen1.5-32B-Q4", max_tokens_len
         "options": {
             "max_tokens": max_tokens_length,
             "num_ctx": max_context_length,
-            "temperature":0.02,
+            "temperature":0.1,
         }
     }
 

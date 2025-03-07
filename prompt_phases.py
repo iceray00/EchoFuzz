@@ -44,7 +44,7 @@ from utils.static_analysis.call_static import call_slither_static_analysis, call
 
 # You can change the setting of the model API here
 def generate_response(prompt, model_name, max_tokens_length, max_context_length, mode):
-    if re.match(r"^(gpt|claude|llama-3.1-405b)", model_name, re.IGNORECASE):
+    if re.match(r"^(gpt|claude|llama-3.1-405b|deepseek-reasoner|deepseek-chat)", model_name, re.IGNORECASE):
         return generate_prompt_response_DB_api(prompt, model_name, max_tokens_length)
     else:
         return generate_prompt_response(prompt, model_name, max_tokens_length, max_context_length, mode)
@@ -59,7 +59,7 @@ def prompt_to_vfcs_phase1(source_code, model_name, ctx, mode):
         f"\n```sol\n{source_code}```\n" +
         prompt_1_target
     )
-    result_1 = generate_response(prompt_1, model_name=model_name, max_tokens_length=600, max_context_length=ctx, mode=mode)
+    result_1 = generate_response(prompt_1, model_name=model_name, max_tokens_length=4096, max_context_length=ctx, mode=mode)
     return result_1
 
 def prompt_vfcs_phase2(result_1, sol_path, source_code, model_name, ctx, mode):
@@ -74,7 +74,7 @@ def prompt_vfcs_phase2(result_1, sol_path, source_code, model_name, ctx, mode):
         prompt_2_static_analysis_3.format(call_slither_static_analysis(sol_path)) +
         prompt_2_static_analysis_target
     )
-    result_2 = generate_response(prompt_2, model_name=model_name, max_tokens_length=400, max_context_length=ctx, mode=mode)
+    result_2 = generate_response(prompt_2, model_name=model_name, max_tokens_length=4096, max_context_length=ctx, mode=mode)
     return result_2
 
 def prompt_generate_VFCS(result_1, result_2, sol_path, source_code, model_name, ctx, mode):
@@ -90,7 +90,7 @@ def prompt_generate_VFCS(result_1, result_2, sol_path, source_code, model_name, 
         staticAnalysis_report_abi.format(call_solc_ar_abi(sol_path)) +
         LLM_generate_VFCS_target
     )
-    result_3 = generate_response(prompt_3, model_name=model_name, max_tokens_length=500, max_context_length=ctx, mode=mode)
+    result_3 = generate_response(prompt_3, model_name=model_name, max_tokens_length=4096, max_context_length=ctx, mode=mode)
     return result_3
 
 def prompt_vfcs_abi(input_vfcs, sol_path, model_name, ctx, mode):
@@ -104,5 +104,5 @@ def prompt_vfcs_abi(input_vfcs, sol_path, model_name, ctx, mode):
         input_VFCS.format(input_vfcs) +
         VFCS_abi_2
     )
-    result_vfcs_abi = generate_response(prompt_vfcs_ABI, model_name=model_name, max_tokens_length=500, max_context_length=ctx, mode=mode)
+    result_vfcs_abi = generate_response(prompt_vfcs_ABI, model_name=model_name, max_tokens_length=4096, max_context_length=ctx, mode=mode)
     return result_vfcs_abi
