@@ -1,5 +1,4 @@
 import argparse
-import json
 import os
 import subprocess
 
@@ -17,8 +16,6 @@ def main():
     At the same time, the vfcs_abi is saved and becomes the Seed Pool
     """
 
-    default_ctx = 14336
-
     parser = argparse.ArgumentParser(description="Generate VFCS")
 
     parser.add_argument("-i", "--input", type=str, help="input single one solidity file",
@@ -26,7 +23,7 @@ def main():
     parser.add_argument("-f", "--input_file", type=str, help="input one file path for Contract source code")
     parser.add_argument("-o", "--output", type=str, default="./vfcs/", help="output path for VFCS")
     parser.add_argument("-m", "--model_name", type=str, default="qwen2_7b", help="model name")
-    parser.add_argument("-c", "--ctx", type=int, default=default_ctx, help="The maximum length of the context")
+    parser.add_argument("-c", "--ctx", type=int, default=14336, help="The maximum length of the context")
     parser.add_argument("--mode", type=str, default="print", help="'silence' or 'print'. Default is 'print'")
 
     args = parser.parse_args()

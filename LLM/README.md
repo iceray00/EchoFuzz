@@ -37,14 +37,3 @@ Start __ollama__ with `ollama serve`
 
 
 
-
-
-
-
-
-
-
-
-
-
-

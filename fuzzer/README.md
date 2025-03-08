@@ -82,6 +82,13 @@ You can run EchoFuzz by executable file `run_echofuzz.sh`
 ```
 
 
+* Use LLM: (We have integrated [DeepBrick's](https://deepbricks.ai) API call method.)
+```bash
+export DB_API_KEY=[your_deepbricks_api_key]
+```
+
+* If you want to use EchoFuzz in local system with `ollama`, you can see `LLM/README.md`.
+
 
 
 
