@@ -55,7 +55,7 @@ or you can exec:
 export GOPROXY=https://goproxy.io
 ```
 
-### Check it working:
+### Check it works:
 
 ```bash
 cmake --version
@@ -64,7 +64,7 @@ geth version
 solc --version
 ```
 
-### Check `go` in bran working:
+### Check `go` in bran works:
 ```bash
 cd bran
 go mod init
