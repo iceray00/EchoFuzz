@@ -9,7 +9,7 @@ Requirements for vfcs_abi (based on the original ABI, modify according to the VF
   - If the current function appears only once in the VFCS, then order_type is "int" and the "order" field gives its position.
   - If the current function is repeatedly called in the VFCS, the "order" field should appear like this: `"order": [0, 2]`. This indicates that the current function is the first and third called function in the VFCS.
 2. In the ABI, the constructor (i.e., the contract's constructor) must be the last in the VFCS. This is an exception because the constructor is called first in the actual execution. So, in the explicit VFCS, we only need to place the constructor at the last position.
-
+ 
 **Example**
 question:
 **input abi information:**
