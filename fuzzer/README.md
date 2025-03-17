@@ -1,18 +1,6 @@
 
 # install _EchoFuzz_
 
-## Dependencies
-
-#### Dependency Configuration:
-
-* CMake: >=3.5.1
-* Python: >=3.5（ideally 3.6）
-* Go: >=1.15
-* leveldb 1.20
-* Geth & Tools: geth, evm, etc
-* solc: 0.4.26
-* numpy
-
 Our framework is implemented based on previous work [IR-Fuzz](https://github.com/Messi-Q/IR-Fuzz), so we will install it first.
 
 ```bash

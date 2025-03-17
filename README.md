@@ -5,19 +5,6 @@ If you want to use a locally deployed LLM to run our framework, see `LLM/README.
 For information about our tool's dependencies, how to install them, and how to install, initialize and use our framework, you can see `fuzzer/README.md`
 
 
-## Dependencies
-
-#### Dependency Configuration:
-
-* CMake: >=3.5.1
-* Python: >=3.5（ideally 3.6）
-* Go: >=1.15
-* leveldb 1.20
-* Geth & Tools: geth, evm, etc
-* solc: 0.4.26
-* numpy
-
-
 # Inital
 
 
