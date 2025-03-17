@@ -26,10 +26,7 @@ prompt_2_static_analysis_2 = """
 {}
 ```
 "
-但是由于上面给出的Q&A是由大语言模型所得出的，因此准确性并不能确保！
-
 **上面的内容可以提供参考！！但也仅仅参考！！**
-**请你不要完全相信上面所给出的内容！！！**
 """
 
 prompt_2_static_analysis_3 = """
@@ -52,16 +49,18 @@ prompt_2_static_analysis_target = """
 请你根据上面的“标准”—— **静态分析报告内容** ，以及最关键的也是最一开始跟你提到的 **带状态VFCS** 的概念、以及“参考内容”—— **通过LLM得到的Q&A信息** ，回答一下以下内容：
 （要求：请你输出时，包括问题也一起输出，不要只输出结果而不输出抛出的问题）
 
-1、当前的这份source code中可能有哪些漏洞/漏洞类型（一份source code中存在多个合约，所以需要分不同合约进行分析）？（之前LLM给出的Q&A，其中不可能的漏洞类型是值得参考的）
+1、当前的这份source code中可能有哪些漏洞/漏洞类型？（之前LLM给出的Q&A，其中不可能的漏洞类型是值得参考的）
     - output: [possible vulnerability/vulnerability type]
 2、你觉得现在的source code中比较重要的函数有哪些？————注意这里比较重要的函数应该是指主要会引发漏洞产生的函数，如果你判断出的比较重要的函数是被private修饰的，但因为在source code中被private修饰的函数（即私有方法）不应该作为重要函数而被你输出出来，所以你应该寻找离这个函数最近的，调用这个函数的父函数，将其父函数输出。只要是在source code中被private修饰的函数，都不算是比较重要的函数！
-注意所有在之前LLM的Q&A中判断为被private修饰的函数都不要在这里输出出来！！！！ 
+注意所有在之前LLM的Q&A中判断为被private修饰的函数都不要在这里输出出来！ 
     - output: [key function names]
 3、你觉得现在在source code中哪一些关键的函数的组合调用会引起漏洞的产生呢？
     - output: [function call sequence]
-4、在source code中按照合约的不同进行划分，可能的VFCS会有哪些呢（这里的VFCS尽可能判断‘少量函数多次重复调用且之间相互组合’的形式，但注意VFCS里的函数不能是Q&A中被private修饰的函数（即私有函数））？
+4、在当前合约中，有哪些函数调用的组合，会改变变量的状态呢？
+    - output: [function call sequence]
+5、在source code中按照合约的不同进行划分，可能的VFCS会有哪些呢（注意VFCS里的函数不能是Q&A中被private修饰的函数（即私有函数））？
     - output: [possible VFCS]
-5、在source code中，有可能存在多份合约，如果只有一份合约的话那么这个合约就是主合约，但如果存在多份合约，那请你判断哪个合约是主合约并输出主合约的名称
+6、在source code中，有可能存在多份合约，如果只有一份合约的话那么这个合约就是主合约，但如果存在多份合约，那请你判断哪个合约是主合约并输出主合约的名称
     - output: [main contract name]
 """
 

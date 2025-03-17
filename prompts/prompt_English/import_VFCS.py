@@ -1,32 +1,30 @@
 introduction_VFCS = """
-Next, let's discuss the field of smart contracts.
+Next, let’s discuss the field of smart contracts.
 
-In the realm of smart contracts, I want to propose a new paradigm. Please allow me to explain. You may refer to this paper: "(Usenix Security'21) SMARTEST Effectively Hunting Vulnerable Transaction Sequences in Smart Contracts through Language Model-Guided Symbolic Execution." If you can't find it, don't worry; I'll give you a brief overview.
+In the field of smart contracts, I propose a new paradigm. Please let me explain.
+```
+Introducing the "Vulnerable Function Call Sequence (VFCS)".
 
-In this paper (SmarTest), the concept of "Vulnerable Transaction Sequence (VTS)" is introduced. It is defined as a continuously inputted transaction sequence that crashes or behaves abnormally at a certain transaction. This specific transaction is considered the last transaction of the VTS, while the preceding transactions are those that alter the contract state. Such a sequence of transactions, capable of changing the contract state and ultimately leading to a crash, is termed VTS.
+During the execution of smart contracts, transactions essentially manifest as continuous sequences of function calls. If a contract continues executing stably, these function call sequences can extend indefinitely. However, when cumulative changes in contract state cause a particular function call to crash or trigger an exception, that function call becomes the end-point of the VFCS. Meanwhile, the key function calls previously responsible for changing the state can be selectively included in the VFCS.
 
-Please note that this VTS is stateful. Inspired by VTS, I propose the following concept: VFCS.
+VFCS is not simply an ordered sequence of calls; rather, it represents a cumulative state change leading up to a particular function call that results in an exception or crash. In brief, VFCS is defined as follows:
 
-Proposing the "Vulnerable Function Call Sequence (VFCS)."
+"A series of function calls continuously alters the state of a contract; when the accumulated state changes reach a certain point, a specific function call results in an exception or crash—thus forming the VFCS."
 
-Background: From the perspective of smart contracts, continuously inputting transactions forms a sequence of consecutive transactions. From the perspective of smart contract source code, this translates to continuous function calls—whether it’s a single transaction or multiple transactions, internally, it manifests as a continuous sequence of function calls. If the contract executes without crashing, this sequence can be considered infinitely long. This is the foundation for proposing VFCS, transforming consecutive transactions into a continuous function call relationship.
+To clarify:
+* VFCS does not necessarily include all function calls; it only selects key function calls.
+* If VFCS were to include all function calls, it would essentially represent a detailed transaction sequence, failing to effectively reduce the state space for vulnerability detection.
+```
 
-The "function call sequence" mentioned here is not about functions calling each other but rather the contract calling functions during transaction execution. The proposed "Vulnerable Function Call Sequence (VFCS)" refers to: at the function level in the contract source code, whether single or multiple transactions continuously call functions. If a crash or anomaly occurs, it reflects at the function level and could only happen at a specific function or among several functions simultaneously, with the last crashing function call marking the end of the VFCS. Previous function calls that altered the contract state are selectively included in the VFCS.
+In practical scenarios, current techniques derived from Software Engineering—such as symbolic execution, static analysis, and rule-driven sequence generation—usually can only track explicit data dependencies among functions. They struggle to identify semantic relationships between function calls. For example, certain function calls might logically offset or neutralize one another's effects on state variables, forming a special semantic relationship --- known as offsetting interactions.
 
-Similarly, this VFCS, like the VTS in SmarTest, is stateful. It is not merely a sequence of function calls but rather a stateful function call that, due to certain values and preceding state-altering function calls, leads to a crash or anomaly.
+Thus, clearly, VFCS possesses the following three key properties:
 
-A High-Level Definition of VFCS: Continuous function calls that progressively change the contract's state, culminating in a crash/anomalous behavior at a particular function at some point, mark the end of the VFCS.
-(This indeed resembles SmarTest's definition of VTS, but it is more granular, focusing on the function level and considering state space compression.)
+1. Vulnerability Trigger: The final function call in a VFCS must execute under specific contract states capable of precisely triggering a smart contract vulnerability.
 
-Intuitively, if such a VFCS is triggered during continuous transactions, it indicates that the current transaction sequence is vulnerable.
+2. State Dependence Chain: Each function within the VFCS is crucial and modifies the contract’s state, fulfilling prerequisites for subsequent function calls in the sequence.
 
-It is crucial to emphasize: the function call sequence here does not necessarily include all functions involved in the calls.
-
-One important point: (in an extreme case) if all function calls are included in this "Vulnerable Function Call Sequence (VFCS)," it essentially becomes a variant of the specific transaction sequence—just a more detailed representation of the transaction sequence, without reducing the state space for target vulnerability hunting. Conversely, in this manner, the snapshot templates required for fuzzing will be fewer, needing only parameter values.
-
-However, if the function sequence in VFCS consists only of critical functions with vulnerable states, this significantly reduces the state space for target hunting. Correspondingly, defining the snapshot templates becomes more complex, with more aspects to consider during fuzzing.
-
-This presents a "Trade-Off." Ultimately, the design's accuracy and efficiency of the tool are influenced by these two aspects: extracting VFCS from the contract and conducting snapshot fuzzing on VFCS to identify vulnerabilities triggering crashes.
+3. Minimality: A VFCS must meet a minimality condition—any proper subsequence of it must not trigger the same vulnerability. In other words, VFCS represents the minimal call sequence necessary to trigger a vulnerability. Removing any function call from the sequence renders the vulnerability non-triggerable.
 """
 
 
