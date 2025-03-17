@@ -5,7 +5,7 @@ If you want to use a locally deployed LLM to run our framework, see `LLM/README.
 For information about our tool's dependencies, how to install them, and how to install, initialize and use our framework, you can see `fuzzer/README.md`
 
 
-# Inital
+## Inital
 
 
 Our framework is implemented based on previous work [IR-Fuzz](https://github.com/Messi-Q/IR-Fuzz), so we will install it first.
