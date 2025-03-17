@@ -8,9 +8,6 @@ from prompt_phases import prompt_to_vfcs_phase1, prompt_vfcs_phase2, prompt_gene
 
 
 def extract_contract_name(file_path):
-    """
-    从文件路径中提取合同名称
-    """
     file_name = os.path.basename(file_path)
     contract_name, _ = os.path.splitext(file_name)
     return contract_name

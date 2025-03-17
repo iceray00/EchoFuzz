@@ -35,7 +35,6 @@ def process_content(content):
 
     return processed_data
 
-
 def save_abi_to_file(contract_name, abi_info, output_dir):
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)

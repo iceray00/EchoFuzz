@@ -11,13 +11,6 @@ def generate_prompt_response_DB_api(prompt, model_name="gpt-4o-mini", max_tokens
 
     if client.api_key is None:
         raise ValueError("Please set DB_API_KEY in your environment variables.")
-    """
-    使用OpenAI API生成响应
-    :param prompt: 输入的提示
-    :param model_name: 使用的模型名称
-    :param max_tokens: 生成的最大token数
-    :return: 生成的响应文本
-    """
     try:
         response = client.chat.completions.create(
             model=model_name,

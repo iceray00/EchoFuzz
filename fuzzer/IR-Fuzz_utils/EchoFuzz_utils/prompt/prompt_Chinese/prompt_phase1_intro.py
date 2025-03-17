@@ -23,17 +23,18 @@ prompt_1_target = f"""
 
 要求：当你思考完上述问题后，请你回答以下几个问题并输出你的回答（包括问题也一起输出，不要只输出结果而不输出提问的的问题）：
 
-1、输出source code中的关键函数（包括全部合约，不要输出任何私有函数！私有函数一定一定一定不是关键函数！如上述例子中的ndTheWinnerIs()）：
+1、输出source code中的关键函数（包括全部合约，不要输出任何私有函数！私有函数一定不是关键函数！）：
     - output: [key function name]
-2、输出当前source code中Solidity的具体版本（现版本均以0.4.x为准）：
+2、输出source code中的函数之间从语意上的可能抵消关系：
+    - output: [functions name]
+3、输出当前source code中Solidity的具体版本（现版本均以0.4.x为准）：
     - output: [solidity version]    
-3、输出当前source code中的私有函数，即被private修饰的函数：
+4、输出当前source code中的私有函数，即被private修饰的函数：
     - output: [private function]
-4、根据上述版本，有哪些可能出现的漏洞呢？
+5、根据上述版本，有哪些可能出现的漏洞呢？
     - output: [possible vulnerabilities]
-5、根据上述版本，不可能出现的漏洞类型有哪些呢？
+6、根据上述版本，不可能出现的漏洞类型有哪些呢？
     - output: [impossible vulnerabilities]
-6、根据具体给出的智能合约solidity具体源代码，经过初步分析，可能有哪些漏洞呢？
+7、根据具体给出的智能合约solidity具体源代码，经过初步分析，可能有哪些漏洞呢？
     - output: [possible vulnerabilities after analysis]
-
 """

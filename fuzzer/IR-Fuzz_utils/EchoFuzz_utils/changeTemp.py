@@ -1,6 +1,5 @@
 import argparse
 
-
 def change_temp(data, gap_time):
     nodes = []
     for i in range(0, len(data), 4):

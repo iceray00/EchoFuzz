@@ -76,47 +76,43 @@ There are a few points to note:
 3. The above is just an example, a sample that meets the VFCS format. The specific content to be output should be based on the specific contract source code and the given Q&A information and static analysis report!
 4. The VFCS must be derived from the ABI! If a function is not given in the ABI, it cannot explicitly appear in the VFCS even if it is crucial!
 5. You must carefully examine the content of the ABI. Many critical functions in the contract (such as those for transferring funds, calling other contracts, permission control, critical information judgment, etc.) may be marked as private in Solidity. However, private functions do not appear in the ABI! The VFCS we need cannot include statements modified by private! If this function needs to be shown, the closest parent function calling this function should be shown, and this parent function should not be modified by private! (Refer to the previous LLM Q&A)
-6. Simply output the function name for function, without any other prefixes or suffixes. The function cannot output functions that are not present in the important functions given by Q&A_2 of the LLM!
-7. You need to identify the main contract in the contract and replace the main contract name in the source code in the above format 'mainContractName_1' instead of directly outputting mainContractName_1.
+6. You need to identify the main contract in the contract and replace the main contract name in the source code in the above format 'mainContractName_1' instead of directly outputting mainContractName_1.
 Here is an example to help you understand what a main contract is:
 **Main Contract** refers to the core contract in a multi-contract system that plays the primary role, managing and coordinating other contracts, and there can only be one main contract in a contract, not multiple main contracts.
 ```solidity
-pragma solidity ^0.4.0;
-contract Governmental {{
-  address public owner;
-  address public lastInvestor;
-  uint public jackpot = 1 ether;
-  uint public lastInvestmentTimestamp;
-  uint public ONE_MINUTE = 1 minutes;
-
-  function Governmental() {{
+pragma solidity ^0.4.24;
+contract Crowdsale {{
+  uint256 phase = 0;  // 0:Active, 1:Success
+  uint256 goal;
+  uint256 invested;
+  address owner;
+  mapping(address => uint256) invests;
+  constructor() public{{
+    goal = 100 ether;
+    invested = 0;
     owner = msg.sender;
-  //  if (msg.value<1 ether) throw;
   }}
-
-  function invest() {{
-    if (msg.value<jackpot/2) throw;
-    lastInvestor = msg.sender;
-    jackpot += msg.value/2;
-    // <yes> <report> TIME_MANIPULATION
-    lastInvestmentTimestamp = block.timestamp;
+  function invest(uint256 donations) public payable {{
+    if (invested<goal){{
+      invests[msg.sender] += donations;
+      invested += donations;
+      phase = 0;
+    }} else {{ phase = 1; }}
   }}
-
-  function resetInvestment() {{
-    if (block.timestamp < lastInvestmentTimestamp+ONE_MINUTE)
-      throw;
-
-    lastInvestor.send(jackpot);
-    owner.send(this.balance-1 ether);
-
-    lastInvestor = 0;
-    jackpot = 1 ether;
-    lastInvestmentTimestamp = 0;
+  function refund() public {{
+    if (phase == 0) {{
+      msg.sender.transfer(invests[msg.sender]);
+      invested -= invests[msg.sender];
+      invests[msg.sender] = 0;
+  }} }}
+  function withdraw() public {{
+    if(phase == 1) {{
+      bug();  // There exists a bug
+      owner.transfer(invested);
+    }} }}
   }}
-}}
-
+  
 contract Attacker {{
-
   function attack(address target, uint count) {{
     if (0<=count && count<1023) {{
       this.attack.gas(msg.gas-2000)(target, count+1);
@@ -127,12 +123,23 @@ contract Attacker {{
   }}
 }}
 ```
-For example, in the contract above, there are two contracts, one is 'Governmental' and the other is 'Attacker', but because 'Governmental' plays the primary role, managing and coordinating other contracts, 'Governmental' is the main contract, and 'Attacker' is not the main contract. Therefore, the mainContractName_1 should be modified to Governmental_1 in the output.
-8. The VFCS can involve multiple calls to the same function. It is not necessarily that a function can only appear once in a VFCS! For example, play()->play()->getProfit()->play()->getProfit() is also possible. This is a good example of both successive calls to the same function and interspersed calls to different functions! It is hoped that the length of the generated VFCS can not be infinite and do not output too many VFCS. The most important thing is to analyze whether this VFCS will indeed cause vulnerabilities.
-9. Only output the VFCS of the main contract.
-10. Only output 3 VFCS.
+For example, in the above contract scenario, there are two contracts: one named 'Crowdsale' and the other named 'Attacker'. However, since the 'Crowdsale' contract plays the main role in managing and coordinating other contracts, 'Crowdsale' is considered the main contract, whereas 'Attacker' is not. Therefore, whenever outputting results, mainContractName_1 must be updated to Crowdsale_1.
+Please take special notice of the following points:
+1. The most probable VFCS is: invest -> invest -> withdraw. Explanation:
+    a. The functions invest and refund have an offsetting relationship. If called sequentially, the refund function resets the variable invested, thereby offsetting previous calls to invest.
+    b. To reach the state phase = 1, the invest function must be called consecutively at least twice.
+    c. Vulnerability trigger: The vulnerability associated with the withdraw function requires the condition phase = 1. Thus, the sequence becomes:
+        invest -> invest -> withdraw
+
+2. You'll notice: VFCS can involve repeated calls to the same function multiple times; the function does not have to appear only once. Thus, VFCS sequences may include repeated calls of the same function.
+
+3. Only output the VFCS of the main contract.
+
+4. Please output the 3 most probable VFCS.
+
 
 Please output all possible VFCS according to this format!
 **Please pay attention!! You only need to output the final VFCS result without any instructions!!**
 output:
+
 """

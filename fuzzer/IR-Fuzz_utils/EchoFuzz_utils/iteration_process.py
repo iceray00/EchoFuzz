@@ -4,20 +4,13 @@ import sys
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__))))
 
-language_prompt = os.environ.get("LANGUAGE_PROMPT").lower()
 
-if language_prompt == "cn" or language_prompt == "chinese":
-    from prompt.prompt_Chinese.import_VFCS import introduction_VFCS
-    from prompt.prompt_pro.prompt_pro_CN import pro_1, pro_2_totalBranchSnippet, pro_3_sequence, pro_4_duration, \
-        pro_5_coverage, pro_6_covered, pro_7_target
-else:
-    from prompt.prompt_English.import_VFCS import introduction_VFCS
-    from prompt.prompt_pro.prompt_pro_EN import pro_1, pro_2_totalBranchSnippet, pro_3_sequence, pro_4_duration, \
-        pro_5_coverage, pro_6_covered, pro_7_target
 
+from prompt.prompt_English.import_VFCS import introduction_VFCS
+from prompt.prompt_pro.prompt_pro_EN import pro_1, pro_2_totalBranchSnippet, pro_3_sequence, pro_4_duration, \
+    pro_5_coverage, pro_6_covered, pro_7_target
 from prompt_phases import generate_response, prompt_vfcs_abi
 from format_conversion import process_content, save_abi_to_file
-from chain_guided import save_to_file
 
 def extract_contract_name(file_path):
     file_name = os.path.basename(file_path)
@@ -103,13 +96,10 @@ def fuzzer_pro():
         contractName = extract_contract_name(args.input)
 
         fuzzerPro = promptFuzzerPro(contractName, source_code, args.duration, args.model_name)
-        save_to_file(fuzzerPro, "swap_backend/iteration_content.txt")
 
         # print(fuzzerPro)
         fuzzerPro_vfcs_abi = prompt_vfcs_abi(fuzzerPro, args.input, model_name=args.model_name, ctx=args.ctx,
                                           mode=args.mode)
-        save_to_file(fuzzerPro_vfcs_abi, "swap_backend/iteration_abi.txt")
-
         print(f"\n \nGenerated VFCS ABI:(fuzzerPro_vfcs_abi)\n \n {fuzzerPro_vfcs_abi}")
 
         fuzzerPro_vfcs_abi_dict = process_content(fuzzerPro_vfcs_abi)

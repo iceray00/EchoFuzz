@@ -5,18 +5,8 @@ import sys
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__))))
 
-language_prompt_from_env = os.environ.get('LANGUAGE_PROMPT').lower()
 
-# default is English
 BASE_PROMPT_PATH = "prompt.prompt_English"
-
-# If the language mode is explicitly specified in the environment, adopt the language mode specified by prompt
-if language_prompt_from_env:
-    if language_prompt_from_env == "cn" or language_prompt_from_env == "chinese":
-        print("Chinese prompt selected!")
-        BASE_PROMPT_PATH = BASE_PROMPT_PATH.replace("English", "Chinese")
-    else:
-        print("English prompt selected!")
 
 # Import modules dynamically
 try:
@@ -27,7 +17,7 @@ try:
 except ImportError as e:
     raise ImportError(f"Error importing modules: {e}")
 
-# function to get the property
+# get the property
 def get_attr(module, attr):
     if hasattr(module, attr):
         return getattr(module, attr)

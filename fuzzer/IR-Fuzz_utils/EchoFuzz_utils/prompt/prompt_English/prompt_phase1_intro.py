@@ -19,18 +19,20 @@ prompt_1_target = f"""Please review the provided smart contract source code and 
 3. What potential issues (vulnerabilities) might arise in the different contracts within this source code?
 4. Pay attention to the current contract version and take note of the Solidity version differences: {solidity_version_diff}
 
-Instructions: After considering the above questions, please provide answers to the following questions and include both the questions and your responses (do not provide just the answers without the questions).
+Instructions: After considering the above discussion, please answer the following questions and clearly output your answers. (Include both the questions and the answers together; do not output the answers alone.)
 
-1. List the key functions in the source code (include all contracts and exclude any private functions; private functions must absolutely not be considered as key functions):
+1. Output the key functions in the source code (including all contracts, excluding any private functions; private functions are definitely not key functions!):
     - output: [key function name]
-2. Specify the exact version of Solidity used in the source code (all versions are assumed to be 0.4.x):
+2. Output functions in the source code that may have semantic offsetting relationships:
+    - output: [functions name]    
+3. Specify the exact version of Solidity used in the source code (all versions are assumed to be 0.4.x):
     - output: [solidity version]    
-3. List the private functions in the source code:
+4. List the private functions in the source code:
     - output: [private function]
-4. Based on the mentioned version, what potential vulnerabilities could exist?
+5. Based on the mentioned version, what potential vulnerabilities could exist?
     - output: [possible vulnerabilities]
-5. Based on the mentioned version, what types of vulnerabilities are not possible?
+6. Based on the mentioned version, what types of vulnerabilities are not possible?
     - output: [impossible vulnerabilities]
-6. After an initial analysis of the specific Solidity source code provided, what potential vulnerabilities might exist?
+7. After an initial analysis of the specific Solidity source code provided, what potential vulnerabilities might exist?
     - output: [possible vulnerabilities after analysis]
 """
