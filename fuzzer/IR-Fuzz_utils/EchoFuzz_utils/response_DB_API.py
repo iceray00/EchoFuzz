@@ -20,15 +20,6 @@ def generate_prompt_response_DB_api(prompt, model_name="gpt-4o-mini", max_tokens
             # stream=True,
         )
 
-        # full_response = ""
-        # for chunk in response:
-        #     delta = chunk.choices[0].delta
-        #     if delta and delta.content:
-        #         full_response += delta.content
-        #         print(delta.content, flush=True)
-        #
-        # return "\n".join(full_response)
-
         print(response.choices[0].message.content)
         print(f"\n*****INPUT: Prompt token count: {response.usage.prompt_tokens} ***")
         print(f"*****OUTPUT: Generated token count: {response.usage.completion_tokens} ***")

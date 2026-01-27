@@ -24,6 +24,7 @@ go build -v -o ../analyse_prefix
 cd ..
 cd source_code
 mv example1.sol GuessNum.sol
+cd ..
 # in echoFuzz_field
 
 cd ../IR-Fuzz_utils

@@ -1,5 +1,10 @@
 # EchoFuzz: Empowering Smart Contract Fuzzing with Large Language Models
 
+Accepted by [ICSE'2026](https://conf.researchr.org/track/icse-2026/icse-2026-research-track), this paper can be found [here](https://doi.org/10.1145/3744916.3773166).
+
+---
+
+
 If you want to use a locally deployed LLM to run our framework, see `LLM/README.md` for details.
 
 For information about our tool's dependencies, how to install them, and how to install, initialize and use our framework, you can see `fuzzer/README.md`
