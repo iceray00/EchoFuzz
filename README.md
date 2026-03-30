@@ -1,6 +1,8 @@
 # EchoFuzz: Empowering Smart Contract Fuzzing with Large Language Models
 
-Accepted by [ICSE'2026](https://conf.researchr.org/track/icse-2026/icse-2026-research-track), this paper can be found [here](https://doi.org/10.1145/3744916.3773166).
+
+&#x1F389;&#x1F389;
+Now EchoFuzz is accepted by [ICSE'2026](https://conf.researchr.org/track/icse-2026/icse-2026-research-track), this paper can be found [here](https://doi.org/10.1145/3744916.3773166).
 
 ---
 
